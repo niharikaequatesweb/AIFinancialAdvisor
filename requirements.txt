@@ -1,0 +1,17 @@
+playwright
+beautifulsoup4
+requests
+fastapi
+uvicorn
+openai
+transformers
+accelerate
+sentencepiece
+sentence-transformers
+huggingface-hub
+faiss-cpu
+python-dotenv
+tenacity
+greenlet==3.2.3
+pydantic-settings==2.10.1
+google-search-results
