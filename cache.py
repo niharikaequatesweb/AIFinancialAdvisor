@@ -23,8 +23,11 @@ class VectorCache:
 
     def load(self):
         self.index = faiss.read_index(str(settings.vector_db_path))
-        with open(settings.cache_path, "rb") as f:
-            self.answers = pickle.load(f)
+        try:
+            with open(settings.cache_path, "rb") as f:
+                self.answers = pickle.load(f)
+        except FileNotFoundError:
+            self.answers = []
 
     # ‑‑ API
     def add(self, embedding: np.ndarray, answer: str):
