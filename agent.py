@@ -25,7 +25,7 @@ async def ask_agent(query: str, profile: dict) -> str:
     print(f"Found {len(vector_results)} relevant products for query: '{query}'")
     
     if not vector_results:
-        return "I couldn't find any relevant BFSI products in our database for your query.", []
+        return "I couldn't find any relevant BFSI products in our database for your query."
     
     # Format the vector search results for LLM analysis
     vector_data = []
@@ -33,6 +33,7 @@ async def ask_agent(query: str, profile: dict) -> str:
         vector_data.append(f"Product (Similarity: {score:.3f}): {product_info}")
     
     vector_summary = "\n".join(vector_data)
+    print(vector_summary)
     
     # Combine profile, query, and vector database results for LLM analysis
     llm_input = {
