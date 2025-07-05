@@ -18,7 +18,6 @@ async def test_agent():
     try:
         response = await ask_agent(query, profile)
         print("Response:", response)
-        print("URLs:", urls)
     except Exception as e:
         print(f"Error: {e}")
         import traceback

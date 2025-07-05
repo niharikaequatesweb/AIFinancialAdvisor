@@ -10,7 +10,7 @@ from search import search_and_scrape
 from summarizer import summarize
 
 
-async def ask_agent(query: str, profile: dict) -> Tuple[str, List[str]]:
+async def ask_agent(query: str, profile: dict) -> str:
     """Main orchestrator – fully async."""
     # Check if vector database is populated, if not populate it
     if vector_cache.index.ntotal == 0:
