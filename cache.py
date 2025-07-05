@@ -35,17 +35,26 @@ class VectorCache:
         self.answers.append(answer)
         self.save()
 
-    def search(self, embedding: np.ndarray, k: int = 5) -> List[Tuple[float, str]]:
+    def search(self, embedding: np.ndarray, k: int) -> List[Tuple[float, str]]:
         """Search for k most similar items and return list of (score, answer) tuples."""
         if self.index.ntotal == 0:
+            print("Vector database is empty!")
             return []
+        
+        print(f"Searching {self.index.ntotal} products with k={k}, threshold={settings.similarity_threshold}")
+        
         D, I = self.index.search(embedding.astype("float32"), k)  # inner‑product similarity
         results = []
+        
+        print(f"Raw search results - scores: {D[0][:5]}, indices: {I[0][:5]}")
+        
         for i in range(len(D[0])):
             score = float(D[0][i])
             idx = int(I[0][i])
-            if score >= settings.similarity_threshold:
+            if score >= 0.2:#settings.similarity_threshold:
                 results.append((score, self.answers[idx]))
+        
+        print(f"Filtered results: {len(results)} products above threshold")
         return results
 
 vector_cache = VectorCache()

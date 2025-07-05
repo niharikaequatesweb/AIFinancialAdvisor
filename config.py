@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     # Vector store / cache
     vector_db_path: Path = Field(default=Path("vector.index"), env="VECTOR_DB_PATH")
     cache_path: Path = Field(default=Path("answer_cache.pkl"), env="CACHE_PATH")
-    similarity_threshold: float = Field(default=0.8, env="SIMILARITY_THRESHOLD")
+    similarity_threshold: float = Field(default=0.2, env="SIMILARITY_THRESHOLD")
 
     class Config:
         env_file = dotenv_path  # Specify the .env file location

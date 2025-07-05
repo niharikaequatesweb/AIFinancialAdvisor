@@ -31,10 +31,10 @@ if "profile" in st.session_state:
             if res.status_code == 200:
                 data = res.json()
                 st.write("🧑‍💼 **Advisor:**", data["answer"])
-                if "sources" in data:
-                    if st.checkbox("Show sources"):
-                        for s in data["sources"]:
-                            st.caption(f'• {s}')
+                # if "sources" in data:
+                #     if st.checkbox("Show sources"):
+                #         for s in data["sources"]:
+                #             st.caption(f'• {s}')
             else:
                 st.error("Error: Unable to fetch response.")
 

@@ -12,9 +12,17 @@ from summarizer import summarize
 
 async def ask_agent(query: str, profile: dict) -> Tuple[str, List[str]]:
     """Main orchestrator – fully async."""
+    # Check if vector database is populated, if not populate it
+    if vector_cache.index.ntotal == 0:
+        print("Vector database is empty. Populating with BFSI data...")
+        process_finco_data()
+        print(f"Vector database now contains {vector_cache.index.ntotal} products")
+    
     # Search vector database for relevant BFSI products
     query_embedding = embed(query)
-    vector_results = vector_cache.search(query_embedding, k=5)
+    vector_results = vector_cache.search(query_embedding, k=100)
+    
+    print(f"Found {len(vector_results)} relevant products for query: '{query}'")
     
     if not vector_results:
         return "I couldn't find any relevant BFSI products in our database for your query.", []
@@ -90,14 +98,28 @@ Response:"""
 
 def process_finco_data():
     """Read finco.json and convert data to vector embeddings."""
-    with open("data/finco.json", "r") as f:
-        data = json.load(f)
-
-    for item in data:
-        text_representation = f"{item['Category']} {item['Sub_Category']} {item['Provider']} {item['Product_Name']} {item['USP']} {item['Key_Features']}"
-        embedding = embed(text_representation)
-        print(f"Embedding shape: {embedding.shape}")
-        vector_cache.add(embedding, text_representation)
+    try:
+        with open("data/finco.json", "r") as f:
+            data = json.load(f)
+        
+        print(f"Loading {len(data)} BFSI products into vector database...")
+        
+        for i, item in enumerate(data):
+            text_representation = f"{item['Category']} {item['Sub_Category']} {item['Provider']} {item['Product_Name']} {item['USP']} {item['Key_Features']}"
+            embedding = embed(text_representation)
+            vector_cache.add(embedding, text_representation)
+            
+            if (i + 1) % 100 == 0:
+                print(f"Processed {i + 1}/{len(data)} products...")
+        
+        print(f"Successfully loaded {len(data)} products into vector database")
+        
+    except FileNotFoundError:
+        print("Error: data/finco.json file not found!")
+        return
+    except Exception as e:
+        print(f"Error processing finco data: {e}")
+        return
 
 if __name__ == "__main__":
     process_finco_data()
