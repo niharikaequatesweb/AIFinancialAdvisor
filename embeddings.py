@@ -8,4 +8,8 @@ def get_embedder():
     return SentenceTransformer(settings.embedding_model)
 
 def embed(text: str):
-    return get_embedder().encode(text, normalize_embeddings=True)
+    embedding = get_embedder().encode(text, normalize_embeddings=True)
+    # Ensure 2D array for FAISS compatibility
+    if embedding.ndim == 1:
+        embedding = embedding.reshape(1, -1)
+    return embedding

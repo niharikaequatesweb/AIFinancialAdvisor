@@ -35,14 +35,17 @@ class VectorCache:
         self.answers.append(answer)
         self.save()
 
-    def search(self, embedding: np.ndarray, k: int = 1) -> Tuple[float | None, str | None]:
+    def search(self, embedding: np.ndarray, k: int = 5) -> List[Tuple[float, str]]:
+        """Search for k most similar items and return list of (score, answer) tuples."""
         if self.index.ntotal == 0:
-            return None, None
+            return []
         D, I = self.index.search(embedding.astype("float32"), k)  # inner‑product similarity
-        score = float(D[0][0])
-        idx = int(I[0][0])
-        if score >= settings.similarity_threshold:
-            return score, self.answers[idx]
-        return None, None
+        results = []
+        for i in range(len(D[0])):
+            score = float(D[0][i])
+            idx = int(I[0][i])
+            if score >= settings.similarity_threshold:
+                results.append((score, self.answers[idx]))
+        return results
 
 vector_cache = VectorCache()
