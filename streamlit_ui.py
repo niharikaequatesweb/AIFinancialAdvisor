@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import json
 
-API_URL = "http://localhost:8502/ask"
+API_URL = "https://ai-financial-advisor-9sdc.onrender.com/ask"
 
 st.title("💰 FinGenie")
 
