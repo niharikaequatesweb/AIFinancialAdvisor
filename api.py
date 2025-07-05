@@ -31,7 +31,7 @@ async def ask(req: QueryRequest):
     """
     try:
         # Pass profile and query to the agent
-        answer, sources = await ask_agent(req.query, req.profile)
-        return QueryResponse(answer=answer, sources=sources)
+        answer = await ask_agent(req.query, req.profile)
+        return QueryResponse(answer=answer)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))  # Handle errors gracefully

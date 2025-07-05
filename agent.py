@@ -26,14 +26,15 @@ async def ask_agent(query: str, profile: dict) -> str:
     
     if not vector_results:
         return "I couldn't find any relevant BFSI products in our database for your query."
-    
+    print("line 29")
     # Format the vector search results for LLM analysis
     vector_data = []
+    print("line 32")
     for score, product_info in vector_results:
         vector_data.append(f"Product (Similarity: {score:.3f}): {product_info}")
-    
+    print("line 35")
     vector_summary = "\n".join(vector_data)
-    print(vector_summary)
+    # print(vector_summary)
     
     # Combine profile, query, and vector database results for LLM analysis
     llm_input = {
@@ -41,10 +42,10 @@ async def ask_agent(query: str, profile: dict) -> str:
         "query": query,
         "vector_database_results": vector_summary
     }
-    llm_response = await analyze_with_llm(llm_input)
+    # llm_response = await analyze_with_llm(llm_input)
 
-    return llm_response
-
+    return str(vector_summary)
+    
 async def analyze_with_llm(input_data: dict) -> str:
     """Send data to LLM for analysis and response generation using Hugging Face Inference API."""
     # Format the prompt for BFSI product recommendations
@@ -67,7 +68,7 @@ Please provide a clear, human-friendly response with:
 - Any important considerations or alternatives
 
 Response:"""
-
+    print("line 71")
     api_url = "https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf"
     headers = {
         "Authorization": f"Bearer {settings.hf_token}",
@@ -81,6 +82,7 @@ Response:"""
         }
     }
     response = requests.post(api_url, headers=headers, json=payload)
+    print("line 85")
     if response.status_code == 200:
         result = response.json()
         # Hugging Face returns a list of generated texts
