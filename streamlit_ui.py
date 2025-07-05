@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import json
 
-API_URL = "http://localhost:8000/ask"
+API_URL = "http://localhost:8502/ask"
 
 st.title("💰 FinGenie")
 
